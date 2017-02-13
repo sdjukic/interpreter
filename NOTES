@@ -1,0 +1,30 @@
+When you enter an expression "3+5" on the command line your interpreter gets
+a string "3+5". In order for the interpreter to actually understand what to do
+with that string it first needs to break the input "3+5" into components called
+tokens. A token is an object that has a type and a value.
+
+The process of breaking the input string into tokens is called lexical analysis.
+So, the first step your interpreter needs to do is read the input of characters
+and convert it into a stream of tokens. The part of the interpreter that does
+it is called a lexical analyzer, or lexer for short. You might also encounter
+other names for the same component, like scanner or tokenizer.
+
+The method get_next_token of the Interpreter class is your lexical analyzer.
+
+So now that your interpreter has access to the stream of tokens made from the input
+characters, the interperter needs to do something with it: it needs to find the structure
+in the flat stream of tokens it gets from the lexer. 
+
+The method responsible for finding and interpreting that structure in expr. This
+method verifies that the sequence of tokens does indeed correspond to the expected
+sequence of tokens. After it's successfully confirmed the structure, it generates
+the result. 
+
+A lexeme is a sequence of characters that form a token. So token is comprised
+of lexemes.
+
+Now going back to finding the structure in the stream of tokens, or put differently,
+the process of recognizing a phrase in the stream of tokens is called parsing.
+The part of an interpreter or compiler that perform that job is called parser.
+
+
