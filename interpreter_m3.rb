@@ -5,6 +5,8 @@
 INTEGER, PLUS, MINUS, EOF = 'INTEGER', 'PLUS', 'MINUS', 'EOF'
 MULTIPLICATION, DIVISION  = 'MULTIPLICATION', 'DIVISION'
 
+# Have all 4 basic operations working
+# Need precedence.
 class Token
   
   attr_accessor :type, :value
@@ -128,13 +130,25 @@ class Interpreter
     end
   end
   
+
+  # 
+  def factor
+    """INTEGER"""
+  
+  end
+
+  def expr
+    """expr -> INTEGER OP INTEGER"""
+
+  end
+
   # expand the expression to accept arbitrary number of additions
   # and subtractions; which is easier problem since both of those
   # have the same precedence.
   # I'm thinking loop and continuously store result of the previous
   # operation in the left
-  def expr
-    """expr -> INTEGER PLUS INTEGER"""
+  def evaluate
+    """evaluate expression"""
 
     # set current token to the first token taken from the input
     @current_token = get_next_token
@@ -163,9 +177,6 @@ class Interpreter
       eat([INTEGER])
 
     
-      # at this point INTEGER PLUS INTEGER sequence of tokens has been
-      # successfully found and the method can just return the result
-      # of adding two integers, thus effectively interpreting client input
       if op.type == PLUS
         left.value = left.value + right.value
         puts "Have an operation which produced #{left.value}"
@@ -175,9 +186,13 @@ class Interpreter
         puts "Have an operation which produced #{left.value}"
         result = left.value
       elsif op.type == MULTIPLICATION
-        result = left.value * right.value
+	left.value = left.value * right.value
+        puts "Have an operation which produced #{left.value}"
+	result = left.value
       elsif op.type == DIVISION
-        result = left.value / right.value
+	left.value = left.value / right.value
+        puts "Have an operation which produced #{left.value}"
+	result = left.value
       else 
         error
       end
@@ -187,7 +202,6 @@ class Interpreter
   end
 end
 
-require 'byebug'
 
 def main
   while true
@@ -199,8 +213,7 @@ def main
     end
 
     interpreter = Interpreter.new(text)
-#    byebug
-    result = interpreter.expr
+    result = interpreter.evaluate
     puts result
 
   end
