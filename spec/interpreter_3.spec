@@ -1,4 +1,4 @@
-require_relative '../lib/interpreter_1'
+require_relative '../lib/interpreter_3'
 
 describe Token do
 
@@ -19,6 +19,11 @@ describe Token do
     expect(v.type).to eq PLUS
   end
 
+  it 'handles - operator' do
+    v = Token.new(MINUS, '-')
+    expect(v.type).to eq MINUS
+  end
+
   it 'handles EOF token' do
     v = Token.new(EOF, nil)
     expect(v.type).to eq EOF
@@ -28,34 +33,39 @@ end
 
 describe Interpreter do
 
-  context 'This interpreter handles only single digit integers' do
+  context 'This interpreter handles only multi digit integers and space' do
     it 'handles addition of two integers' do
       itrp = Interpreter.new('3+3')
       expect(itrp.expr).to eq 6
     end
-
-    it 'takes first digit from multi digit integer' do
+  
+    it 'correctly handles multi-digit integers' do
       itrp = Interpreter.new('3+44')
+      expect(itrp.expr).to eq 47
+    end
+
+    it 'correctly handles multi-digit integers in any position' do
+      itrp = Interpreter.new('34+4')
+      expect(itrp.expr).to eq 38
+    end
+
+    it 'handles subtraction' do
+      itrp = Interpreter.new('3-4')
+      expect(itrp.expr).to eq -1
+    end
+
+    it 'handles spaces' do
+      itrp = Interpreter.new(' 3 + 4 ')
       expect(itrp.expr).to eq 7
     end
+  
+    it 'handles expressions with more than one operator' do
+      itrp = Interpreter.new('3 + 3 + 3 - 1')
+      expect(itrp.expr).to eq 8
+    end
 
-    it 'If multi digit integer is in the first place it raises error' do
-      itrp = Interpreter.new('34+4')
-      expect { itrp.expr }.to raise_error(StandardError, 'Error parsing input')
-    end
-  
-    it 'Does not handle expressions with more than one operator, breaks out after first.' do
-      itrp = Interpreter.new('3+3+3')
-      expect(itrp.expr).to eq 6
-    end
-  
     it 'Does not handle negative numbers' do
       itrp = Interpreter.new('-3+3')
-      expect { itrp.expr }.to raise_error(StandardError, 'Error parsing input')
-    end
-
-    it 'Does not handle subtraction' do
-      itrp = Interpreter.new('3-4')
       expect { itrp.expr }.to raise_error(StandardError, 'Error parsing input')
     end
 
@@ -71,11 +81,6 @@ describe Interpreter do
 
     it 'Does not handle paretheses' do
       itrp = Interpreter.new('(3+4)')
-      expect { itrp.expr }.to raise_error(StandardError, 'Error parsing input')
-    end
-
-    it 'Does not handle spaces' do
-      itrp = Interpreter.new('3 + 4')
       expect { itrp.expr }.to raise_error(StandardError, 'Error parsing input')
     end
   end
