@@ -39,6 +39,8 @@ class Interpreter
     @current_token = nil
   end
 
+  # This is not very informative FIX
+  # SD 2020-04-11
   def error
     raise StandardError, 'Error parsing input'
   end
@@ -94,7 +96,7 @@ class Interpreter
     left = @current_token
     eat(INTEGER)
 
-    # we expect the curretn token to be a '+' token
+    # we expect the current token to be a '+' token
     op = @current_token
     eat(PLUS)
 
@@ -117,7 +119,6 @@ class Interpreter
   end
 end
 
-require 'byebug'
 
 def main
   while true
@@ -129,7 +130,6 @@ def main
     end
 
     interpreter = Interpreter.new(text)
-#    byebug
     result = interpreter.expr
     puts result
 
